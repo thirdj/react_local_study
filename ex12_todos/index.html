@@ -18,14 +18,16 @@ var Input = React.createClass({
   },
   stateValue: function(e) {
     e.preventDefault();
-    if (this.refs.todo.value.trim() !== '') {
-      this.props.handle(this.refs.todo.value);
-      this.props.onChk('true');
-      this.refs.todo.value = '';
+    var _refTodo = this.refs.todo;
+    if (_refTodo.value.trim() !== '') {
+      this.props.todoLength();
+      this.props.handle(_refTodo.value);
+      //this.props.onChk('true');
+      _refTodo.value = '';
     } else {
       alert('값을 입력하세요.');
-      this.refs.todo.value = '';
-      this.refs.todo.focus();
+      _refTodo.value = '';
+      _refTodo.focus();
       return false;
     }
 
@@ -44,17 +46,27 @@ var Input = React.createClass({
   }
 });
 var Lists = React.createClass({
+  //let checkTrueFalse = false;
   handleClick: function(e) {
-    console.log('e  ', e.target.checked);
-    if (e.target.checked) {
-      this.props.onChk(e.target.checked);
+    var evt = e || event;
+    console.log('e  ', evt.target.checked);
+    if (evt.target.checked) {
+      this.props.onChk(evt.target.checked);
+      //checkTrueFalse = evt.target.checked;
     }
   },
   render: function() {
+    const labelAddStyle = {
+      color: 'red',
+      textDecoration: 'line-through'
+    };
+    const spanAddStyle = {
+      color: '#000'
+    };
     return <li>
             <label for={'chk'+this.props.len}>
               <input type="checkbox" id={'chk'+this.props.len} onClick={this.handleClick} />
-              #{this.props.len+1} - {this.props.items}
+              <span>#{this.props.len+1} - {this.props.items}</span>
             </label>
           </li>
   }
@@ -62,8 +74,9 @@ var Lists = React.createClass({
 var Todos = React.createClass({
   getInitialState: function() {
     return {
-      data: ['aaa', 'bbb'],
-      checked: false
+      data: ['choi', 'young'],
+      checked: false,
+      count: 0
     }
   },
   handleInputValue: function(arg) {
@@ -77,13 +90,25 @@ var Todos = React.createClass({
       checked: isChecked
     });
   },
+  onTodosLength: function() {
+    //this.refs.todosLength.children = 3;
+    this.setState({
+      count: this.state.data.length + 1
+    })
+  },
+  componentDidMount: function() {
+    this.setState({
+      count: this.state.data.length
+    })
+  },
   render: function() {
     return (
       <div>
         <Input
           handle={this.handleInputValue}
+          todoLength={this.onTodosLength}
         />
-        <h1>출력 부분</h1>
+        <h1>할일 목록: <span ref="todosLength">{this.state.count + ' ea'}</span></h1>
         <div>
           <ul>
           {
