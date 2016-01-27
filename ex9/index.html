@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ex9</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+</head>
+<body>
+<script type="text/jsx">
+
+  var Test = React.createClass({
+    componentDidMount(){
+      console.log('this.refs.txt  ==> ', this.refs.txt);
+      console.log('this.refs.txt.props  ==> ', this.refs.txt.props); // Object {children: Array[2]}
+      console.log('this.refs.txt.props.children  ==> ', this.refs.txt.props.children); // ["xxx", Object]
+    },
+    render() {
+      return (
+        <div ref="txt">
+          xxx
+          <span ref="ttt">1234</span>
+        </div>
+      );
+    }
+  });
+
+  React.render(<Test />, document.body);
+</script>
+</body>
+</html>

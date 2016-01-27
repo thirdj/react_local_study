@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ex8</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+</head>
+<body>
+<script type="text/jsx">
+
+  var Count = React.createClass({
+    propTypes: {
+      initialCount: React.PropTypes.string.isRequired
+    },
+    getDefaultProps() {
+      return { initialCount: 0 };
+    },
+    getInitialState() {
+      return {
+        count: this.props.initialCount
+      };
+    },
+    componentDidMount() {
+      console.log(this.props.children);
+    },
+    onClick() {
+      this.setState({ count: this.state.count + 1 });
+    },
+    render() {
+      return (
+        <div>
+          <p ref="text">{this.state.count}</p>
+          <button onClick={this.onClick}>click</button>
+        </div>
+      );
+    }
+  });
+
+  React.render(<Count initialCount={10} />, document.body);
+</script>
+</body>
+</html>

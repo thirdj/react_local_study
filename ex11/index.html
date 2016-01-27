@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ex11</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+<style>
+  body {
+    background: #343434;
+  }
+  .dispCount {
+    font-size: 36px; font-weight: bold; color: #03cc85;
+    margin: 0; padding: 20px;
+  }
+  button {
+    box-shadow: 0 5px 0 #03cc85; border: none; padding: 10px 30px;
+    background: #03cc85; display: inline-block; color: #fff;
+    margin-right: 5px; border-radius: 5px; cursor: pointer;
+    font-size: 16px; font-weight: bold; outline: 0 none;
+  }
+  #app div {
+    width: 300px; background: #343434; color: white; padding: 20px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/jsx">
+
+var Counter = React.createClass({
+  getInitialState: function() {
+    return { count: 0 }
+  },
+  handleIncrement: function() {
+    this.setState({
+      count: this.state.count + 1
+    });
+  },
+  handleDecrement: function() {
+    this.setState({
+      count: this.state.count - 1
+    });
+  },
+  render: function() {
+    return (
+      <div>
+        <div className="dispCount">{this.state.count}</div>
+        <button ref="in" onClick={this.handleIncrement}>Increment</button>
+        <button ref="de" onClick={this.handleDecrement}>Decrement</button>
+      </div>
+    );
+  }
+});
+
+React.render(
+  <Counter />,
+  document.getElementById('app')
+);
+
+</script>
+</body>
+</html>
