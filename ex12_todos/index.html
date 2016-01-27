@@ -22,7 +22,7 @@ var Input = React.createClass({
       this.props.handle(this.refs.todo.value);
       this.refs.todo.value = '';
     } else {
-      alert('값을 입력하세요');
+      alert('값을 입력하세요.');
       this.refs.todo.value = '';
       this.refs.todo.focus();
       return false;
