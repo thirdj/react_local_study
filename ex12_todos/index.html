@@ -45,7 +45,7 @@ var Input = React.createClass({
 });
 var Lists = React.createClass({
   handleClick: function(e) {
-    //console.log('e  ', e.target.checked);
+    console.log('e  ', e.target.checked);
     if (e.target.checked) {
       this.props.onChk(e.target.checked);
     }
@@ -81,7 +81,6 @@ var Todos = React.createClass({
     return (
       <div>
         <Input
-          onChk={this.onIsChecked}
           handle={this.handleInputValue}
         />
         <h1>출력 부분</h1>
@@ -92,6 +91,7 @@ var Todos = React.createClass({
               return <Lists
                 key={item+idx}
                 items={item}
+                onChk={this.onIsChecked}
                 len={idx}
               />
             })
