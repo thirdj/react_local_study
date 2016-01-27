@@ -43,7 +43,7 @@ var Input = React.createClass({
 });
 var Lists = React.createClass({
   render: function() {
-    return <li>{this.props.len+1}:: {this.props.items}</li>
+    return <li>#{this.props.len+1} - {this.props.items}</li>
   }
 });
 var Todos = React.createClass({
@@ -58,9 +58,6 @@ var Todos = React.createClass({
     });
   },
   render: function() {
-    var lists = this.state.data.map(function(item, idx) {
-                  return <Lists key={item+idx} items={item} len={idx} />
-                });
     return (
       <div>
         <Input
@@ -70,7 +67,11 @@ var Todos = React.createClass({
         <h1>출력 부분</h1>
         <div>
           <ul>
-          {lists}
+          {
+            this.state.data.map(function(item, idx) {
+              return <Lists key={item+idx} items={item} len={idx} />
+            })
+          }
         </ul>
         </div>
       </div>
