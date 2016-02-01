@@ -24,6 +24,7 @@ var Input = React.createClass({
       this.props.handle(_refTodo.value);
       //this.props.onChk('true');
       _refTodo.value = '';
+      _refTodo.focus();
     } else {
       alert('값을 입력하세요.');
       _refTodo.value = '';
@@ -47,12 +48,14 @@ var Input = React.createClass({
 });
 var Lists = React.createClass({
   //let checkTrueFalse = false;
-  handleClick: function(e) {
-    var evt = e || event;
-    console.log('e  ', evt.target.checked);
-    if (evt.target.checked) {
-      this.props.onChk(evt.target.checked);
-      //checkTrueFalse = evt.target.checked;
+  handleCkeckboxChange: function() {
+    this.setState({
+      isChecked: !this.state.isChecked
+    });
+  },
+  getInitialState: function() {
+    return {
+      isChecked: false
     }
   },
   render: function() {
@@ -61,12 +64,18 @@ var Lists = React.createClass({
       textDecoration: 'line-through'
     };
     const spanAddStyle = {
-      color: '#000'
+      color: '#000',
+      fontWeight: 'bold'
     };
     return <li>
-            <label for={'chk'+this.props.len}>
-              <input type="checkbox" id={'chk'+this.props.len} onClick={this.handleClick} />
-              <span>#{this.props.len+1} - {this.props.items}</span>
+            <label style={this.state.isChecked ? labelAddStyle : {}}>
+              <input
+                type="checkbox"
+                ref={'chk'+this.props.len}
+                id={'chk'+this.props.len}
+                onChange={this.handleCkeckboxChange}
+              />
+              <span style={this.state.isChecked ? spanAddStyle : {}}>#{this.props.len+1} - {this.props.items}</span>
             </label>
           </li>
   }
@@ -75,19 +84,12 @@ var Todos = React.createClass({
   getInitialState: function() {
     return {
       data: ['choi', 'young'],
-      checked: false,
       count: 0
     }
   },
   handleInputValue: function(arg) {
     this.setState({
       data: this.state.data.concat(arg),
-    });
-  },
-  onIsChecked: function(isChecked) {
-    console.log('isChecked   ', isChecked);
-    this.setState({
-      checked: isChecked
     });
   },
   onTodosLength: function() {
@@ -116,7 +118,6 @@ var Todos = React.createClass({
               return <Lists
                 key={item+idx}
                 items={item}
-                onChk={this.onIsChecked}
                 len={idx}
               />
             })
