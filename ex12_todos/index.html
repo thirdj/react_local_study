@@ -5,6 +5,12 @@
 <title>Todos</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+<style>
+.line {
+  color: red;
+  text-decoration: line-through;
+}
+</style>
 </head>
 <body>
 
@@ -22,7 +28,6 @@ var Input = React.createClass({
     if (_refTodo.value.trim() !== '') {
       this.props.todoLength();
       this.props.handle(_refTodo.value);
-      //this.props.onChk('true');
       _refTodo.value = '';
       _refTodo.focus();
     } else {
@@ -47,11 +52,11 @@ var Input = React.createClass({
   }
 });
 var Lists = React.createClass({
-  //let checkTrueFalse = false;
   handleCkeckboxChange: function() {
     this.setState({
       isChecked: !this.state.isChecked
     });
+    this.props.onDoneCount(!this.state.isChecked);
   },
   getInitialState: function() {
     return {
@@ -68,7 +73,7 @@ var Lists = React.createClass({
       fontWeight: 'bold'
     };
     return <li>
-            <label style={this.state.isChecked ? labelAddStyle : {}}>
+            <label className={this.state.isChecked ? 'line' : {}}>
               <input
                 type="checkbox"
                 ref={'chk'+this.props.len}
@@ -83,8 +88,9 @@ var Lists = React.createClass({
 var Todos = React.createClass({
   getInitialState: function() {
     return {
-      data: ['choi', 'young'],
-      count: 0
+      data: ['hi', 'hello'],
+      count: 0,
+      done: 0
     }
   },
   handleInputValue: function(arg) {
@@ -93,7 +99,6 @@ var Todos = React.createClass({
     });
   },
   onTodosLength: function() {
-    //this.refs.todosLength.children = 3;
     this.setState({
       count: this.state.data.length + 1
     })
@@ -103,6 +108,11 @@ var Todos = React.createClass({
       count: this.state.data.length
     })
   },
+  onTodoDoneCount: function(check) {
+    this.setState({
+      done: check ? this.state.done + 1 : this.state.done - 1
+    });
+  },
   render: function() {
     return (
       <div>
@@ -110,7 +120,7 @@ var Todos = React.createClass({
           handle={this.handleInputValue}
           todoLength={this.onTodosLength}
         />
-        <h1>할일 목록: <span ref="todosLength">{this.state.count + ' ea'}</span></h1>
+        <h1>할일 목록: <span ref="todosLength">{'전체: ' + this.state.count + ' / 완료: ' + this.state.done }</span></h1>
         <div>
           <ul>
           {
@@ -118,9 +128,10 @@ var Todos = React.createClass({
               return <Lists
                 key={item+idx}
                 items={item}
+                onDoneCount={this.onTodoDoneCount}
                 len={idx}
               />
-            })
+            }.bind(this))
           }
         </ul>
         </div>
