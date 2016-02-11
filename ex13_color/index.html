@@ -5,9 +5,6 @@
 <title>What color?</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
-<style>
-body { background-color: teal; }
-</style>
 </head>
 <body>
 <div id="main"></div>
@@ -32,13 +29,33 @@ body { background-color: teal; }
   });
 
   var Colors = React.createClass({
-    handleBackgroundColor: function(color) {
-      document.body.style.background = color;
-    },
     getInitialState: function() {
       return {
         backgroundColor: 'teal'
       }
+    },
+    handleBackgroundColor: function(color) {
+      this.setState({
+        backgroundColor: color
+      });
+    },
+    updateBackgroundColor: function() {
+      document.body.style.background = this.state.backgroundColor;
+    },
+    componentDidMount: function() {
+      // DOM 을 그린 직후 호출.
+      console.log('componentDidMount ');
+      this.updateBackgroundColor();
+    },
+    componentWillUpdate: function() {
+      // 컴포넌트가 갱신되기 전에 호출.
+      console.log('componentWillUpdate ');
+    },
+    componentDidUpdate: function() {
+      // 컴포넌트가 갱신된 뒤에 호출.
+      // state 가 변경되어도 호출 됨.
+      console.log('componentDidUpdate ');
+      this.updateBackgroundColor();
     },
     render: function() {
       return (
