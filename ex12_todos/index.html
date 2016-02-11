@@ -6,14 +6,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
 <style>
-.line {
-  color: red;
-  text-decoration: line-through;
-}
+.line { color: red; text-decoration: line-through; }
 </style>
 </head>
 <body>
-
 <div id="app"></div>
 <script type="text/jsx">
 
@@ -46,7 +42,7 @@ var Input = React.createClass({
           className="input-todo"
           ref="todo"
         />
-        <input type="submit" value="입력" onClick={this.stateValue} />
+        <input type="submit" value="추가" onClick={this.stateValue} />
       </form>
     );
   }
@@ -73,7 +69,7 @@ var Lists = React.createClass({
       fontWeight: 'bold'
     };
     return <li>
-            <label className={this.state.isChecked ? 'line' : {}}>
+            <label className={this.state.isChecked ? 'line' : ''}>
               <input
                 type="checkbox"
                 ref={'chk'+this.props.len}
@@ -121,6 +117,8 @@ var Todos = React.createClass({
           todoLength={this.onTodosLength}
         />
         <h1>할일 목록: <span ref="todosLength">{'전체: ' + this.state.count + ' / 완료: ' + this.state.done }</span></h1>
+        <Buttons />
+        <br />
         <div>
           <ul>
           {
@@ -139,6 +137,26 @@ var Todos = React.createClass({
     );
   }
 });
+var Buttons = React.createClass({
+  onAllTodosView: function() {
+    console.log('전체 보기');
+  },
+  onIngTodosView: function() {
+    console.log('할일 보기');
+  },
+  onDoneTodosView: function() {
+    console.log('완료 보기');
+  },
+  render: function(){
+    return (
+      <div className="btn btn-set">
+        <button onClick={this.onAllTodosView}>전체 보기</button>
+        <button onClick={this.onIngTodosView}>할일 보기</button>
+        <button onClick={this.onDoneTodosView}>완료 보기</button>
+      </div>
+    )
+  }
+});
 
 React.render(
   <Todos />,
@@ -147,3 +165,8 @@ React.render(
 </script>
 </body>
 </html>
+
+<!--
+  기존 Todos 같이 버튼을 전체/할일/완료 만들어서
+  각각 나타나게 수정 해보기.
+-->

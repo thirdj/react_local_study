@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>What color?</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+<style>
+body { background-color: teal; }
+</style>
+</head>
+<body>
+<div id="main"></div>
+
+<script type="text/jsx">
+  var ChooseBox = React.createClass({
+    onHandleChangeBox: function(e) {
+      this.props.onChangeSelectBox(e.target.value);
+    },
+    render: function() {
+      return (
+        <div>
+          <select id="colorBox" onChange={this.onHandleChangeBox}>
+            <option value="teal">teal</option>
+            <option value="orange">orange</option>
+            <option value="deepskyblue">deepskyblue</option>
+            <option value="orangered">orangered</option>
+          </select>
+        </div>
+      )
+    }
+  });
+
+  var Colors = React.createClass({
+    handleBackgroundColor: function(color) {
+      document.body.style.background = color;
+    },
+    getInitialState: function() {
+      return {
+        backgroundColor: 'teal'
+      }
+    },
+    render: function() {
+      return (
+        <div>
+          <h1>Hello, World</h1>
+          <p>What color?</p>
+          <ChooseBox onChangeSelectBox={this.handleBackgroundColor} />
+        </div>
+      )
+    }
+  });
+
+  React.render(
+    <Colors />,
+    document.getElementById('main')
+  );
+</script>
+</body>
+</html>
