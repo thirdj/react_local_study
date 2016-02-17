@@ -117,7 +117,7 @@ var Todos = React.createClass({
           todoLength={this.onTodosLength}
         />
         <h1>할일 목록: <span ref="todosLength">{'전체: ' + this.state.count + ' / 완료: ' + this.state.done }</span></h1>
-        <Buttons />
+        <Buttons todoss={this}/>
         <br />
         <div>
           <ul>
@@ -138,6 +138,11 @@ var Todos = React.createClass({
   }
 });
 var Buttons = React.createClass({
+  componentDidMount: function() {
+    console.log('111 this  ', this.props.todoss);
+  },
+  componentWillUpdate: function() {
+  },
   onAllTodosView: function() {
     console.log('전체 보기');
   },

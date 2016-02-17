@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Filter List</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+<style>
+* { box-sizing: border-box; }
+body { padding: 20px; background: #2c3e50; }
+.filter-list {
+  margin: auto; width: 300px; background: #3498db;
+  border-radius: 5px; border: 1px solid #196090;
+}
+.filter-list input {
+  width: 100%; display: block; padding: 10px; border-radius: 5px 5px 0px 0px;
+  border: 0; font-size: 24px;
+}
+.filter-list input:focus { outline: none; }
+.filter-list ul { margin: 0; padding: 0; }
+.filter-list ul li {
+  list-style-type: none; margin: 0; color: white;
+  padding: 10px 20px; border-top: 1px solid #196090;
+}
+.filter-list ul li:hover { background: #2980b9; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+<script type="text/jsx">
+
+var FilteredList = React.createClass({
+  filterList: function(e) {
+    var updatedList = this.state.initialItems;
+    updatedList = updatedList.filter(function(item) {
+      return item.toLowerCase().search( e.target.value.toLowerCase() ) !== -1;
+    });
+    this.setState({ items: updatedList });
+  },
+  getInitialState: function() {
+    return {
+      initialItems: [
+        "Apples",
+         "Broccoli",
+         "Chicken",
+         "Duck",
+         "Eggs",
+         "Fish",
+         "Granola",
+         "Hash Browns"
+      ],
+      items: []
+    }
+  },
+  componentWillMount: function() {
+    this.setState({
+      items: this.state.initialItems
+    })
+  },
+  render: function() {
+    return (
+      <div className="filter-list">
+        <input type="text" placeholder="Search" onChange={this.filterList} />
+        <List items={this.state.items} />
+      </div>
+    );
+  }
+});
+
+var List = React.createClass({
+  render: function() {
+    return (
+      <ul>
+      {
+        this.props.items.map(function(item) {
+          return <li key={item}>{item}</li>
+        })
+      }
+      </ul>
+    )
+  }
+})
+
+React.render(
+  <FilteredList />,
+  document.getElementById('app')
+)
+
+</script>
+</body>
+</html>
