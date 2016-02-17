@@ -7,9 +7,13 @@ class App extends React.Component {
     this.state = {
       red: 0,
       green: 0,
-      blue: 0
+      blue: 0,
+      cor1: 0,
+      cor2: 0,
+      cor3: 0
     }
     this.update = this.update.bind(this);
+    this.updateColor = this.updateColor.bind(this);
   }
   update(e) {
     this.setState({
@@ -18,7 +22,19 @@ class App extends React.Component {
       blue: ReactDOM.findDOMNode(this.refs.blue.refs.inp).value
     })
   }
+  updateColor(e) {
+    this.setState({
+      cor1: ReactDOM.findDOMNode(this.refs.cor1.refs.cor).value,
+      cor2: ReactDOM.findDOMNode(this.refs.cor2.refs.cor).value,
+      cor3: ReactDOM.findDOMNode(this.refs.cor3.refs.cor).value
+    })
+  }
   render() {
+    const style = {
+      backgroundColor: 'rgb(' + this.state.cor1 + ',' + this.state.cor2 + ',' + this.state.cor3 + ')',
+      height: '200px',
+      width: '100px'
+    }
     return (
       <div>
         <Slider ref="red" update={this.update} />
@@ -29,6 +45,13 @@ class App extends React.Component {
         <hr />
         <Slider ref="blue" update={this.update} />
         <h1>{this.state.blue}</h1>
+
+        <br /><br />
+        <Color ref="cor1" updateColor={this.updateColor} />
+        <Color ref="cor2" updateColor={this.updateColor} />
+        <Color ref="cor3" updateColor={this.updateColor} />
+        <div style={style}>
+        </div>
       </div>
     )
   }
@@ -48,8 +71,19 @@ class Slider extends React.Component {
   }
 }
 
+class Color extends React.Component {
+  render() {
+    return (
+      <input type="range"
+        ref="cor"
+        min="0"
+        max="99"
+        onChange={this.props.updateColor} />
+    )
+  }
+}
+
 const Widget = (props) => {
-  console.log('props   ', props);
   return (
     <div>
       <input type="text" onChange={props.update} />
