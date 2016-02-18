@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 
 let Mixin = InnerComponent => class extends Component {
   constructor() {
@@ -49,71 +49,103 @@ let ButtonMixed = Mixin(Button);
 let LabelMixed = Mixin(Label);
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      red: 0
+    }
+    this.update = this.update.bind(this);
+    this.updateColor = this.updateColor.bind(this);
+  }
   update(e) {
     this.setState({
-      red: render.findDOMNode(this.refs.red.refs.inp).value,
-      green: render.findDOMNode(this.refs.green.refs.inp).value,
-      blue: render.findDOMNode(this.refs.blue.refs.inp).value
+      red: ReactDOM.findDOMNode(this.refs.red.refs.inp).value
     })
   }
   updateColor(e) {
     this.setState({
-      cor1: render.findDOMNode(this.refs.cor1.refs.cor).value,
-      cor2: render.findDOMNode(this.refs.cor2.refs.cor).value,
-      cor3: render.findDOMNode(this.refs.cor3.refs.cor).value
+      cor1: ReactDOM.findDOMNode(this.refs.cor1.refs.cor).value,
+      cor2: ReactDOM.findDOMNode(this.refs.cor2.refs.cor).value,
+      cor3: ReactDOM.findDOMNode(this.refs.cor3.refs.cor).value
     })
   }
 
   render() {
-/*
+
     const style = {
       backgroundColor: 'rgb(' + this.state.cor1 + ',' + this.state.cor2 + ',' + this.state.cor3 + ')',
       height: '200px',
       width: '100px'
     }
-*/
+
     return (
+/*
       <div>
         <ButtonMixed txt="Button" />
         <LabelMixed txt="Label" />
       </div>
-      /*
+
       <button onClick={this.updateButton}>
         {this.props.txt} - {this.state.val}
       </button>
       */
-/*
+
       <div>
-        <Slider ref="red" update={this.update} />
+        <NumInput ref="red"
+          min={0}
+          max={255}
+          step={1}
+          val={+this.state.red}
+          type="number"
+          label="Red"
+          update={this.update}
+        />
         <h1>{this.state.red}</h1>
-        <hr />
-        <Slider ref="green" update={this.update} />
-        <h1>{this.state.green}</h1>
-        <hr />
-        <Slider ref="blue" update={this.update} />
-        <h1>{this.state.blue}</h1>
-        <br /><br />
-        <Color ref="cor1" updateColor={this.updateColor} />{this.state.cor1}
-        <Color ref="cor2" updateColor={this.updateColor} />{this.state.cor2}
-        <Color ref="cor3" updateColor={this.updateColor} />{this.state.cor3}
-        <div style={style}>
-        </div>
       </div>
-*/
+
     )
   }
 }
 
-class Slider extends Component {
+class NumInput extends Component {
   render() {
+    let label = this.props.label !== '' ?
+      <label>{this.props.label} - {this.props.val}</label> : '';
     return (
-      <input type="range"
-        ref="inp"
-        min="0"
-        max="255"
-        onChange={this.props.update} />
+      <div>
+        <input
+          type={this.props.type}
+          min={this.props.min}
+          max={this.props.max}
+          step={this.props.step}
+          defaultValue={this.props.val}
+          ref="inp"
+          onChange={this.props.update} />
+          {label}
+      </div>
     )
   }
+}
+
+NumInput.propTypes = {
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
+    step: React.PropTypes.number,
+    val: React.PropTypes.number,
+    label: React.PropTypes.string,
+    update: React.PropTypes.func.isRequired,
+    type: React.PropTypes.oneOf(['number', 'range'])
+}
+
+NumInput.defaultProps = {
+  min: 0,
+  max: 0,
+  step: 1,
+  val: 0,
+  label: '',
+  type: 'range'
 }
 
 class Color extends Component {
