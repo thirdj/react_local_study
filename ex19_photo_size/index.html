@@ -1,0 +1,70 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Profile, React</title>
+<style media="screen">
+.profile-box {
+  display: inline-block;
+  margin: 24px;
+  margin-top: 2px;
+  border: 1px solid #ddd;
+  padding: 6px;
+  text-align: center;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0, 0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+
+<script type="text/babel">
+
+class Profile extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { height: 100 };
+		this.zoomPicOut = this.zoomPicOut.bind(this);
+		this.zoomPicIn = this.zoomPicIn.bind(this);
+	}
+  render() {
+		const { name, age, bio, pic } = this.props;
+		const { height } = this.state;
+    return (
+      <hello className="profile-box">
+        <h4>Hello, {name}</h4>
+        <h4>Age: {age}</h4>
+        <h4>Bio: {bio}</h4>
+				<img src={pic} height={height} /> <br/>
+				<button onClick={this.zoomPicOut}>-</button>
+				<button onClick={this.zoomPicIn}>+</button>
+      </hello>
+    );
+  }
+	zoomPicIn() {
+		this.setState({ height: this.state.height + 20 });
+	}
+	zoomPicOut() {
+		if (this.state.height <= 100) {
+			return false;
+		}
+		this.setState({ height: this.state.height - 20 });
+	}
+}
+
+ReactDOM.render(
+  <Profile
+		name="thirdj"
+		age={34}
+		bio="I like Young!"
+		pic="http://goo.gl/qnbcXi"
+	/>,
+  document.getElementById('app')
+);
+
+</script>
+</body>
+</html>

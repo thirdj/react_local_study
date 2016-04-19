@@ -1,0 +1,58 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Navigation Menu, React</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="app"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script type="text/babel">
+
+  class Menu extends React.Component {
+    constructor(props){
+      super(props);
+
+      this.state = { focused: 0 };
+    }
+    handleMenu(idx) {
+      this.setState({
+        focused: idx
+      });
+    }
+    render() {
+      var items = this.props.navi.map((item, idx) => {
+        let _style = '';
+        if (this.state.focused == idx) _style = 'focused';
+        return <li
+                className={_style}
+                key={item+idx}
+                onClick={this.handleMenu.bind(this, idx)}
+              >{item}</li>
+      });
+      return (
+        <div>
+          <ul>{items}</ul>
+          <p>Selected: {this.props.navi[this.state.focused]}</p>
+        </div>
+      )
+    }
+  }
+  Menu.defaultProps = {
+    navi: ['Home', 'Services', 'About', 'Contact us']
+  };
+  Menu.propTypes = {
+    navi: React.PropTypes.array
+  }
+
+
+  ReactDOM.render(
+    <Menu />,
+    document.getElementById('app')
+  );
+</script>
+</body>
+</html>
