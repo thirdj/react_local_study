@@ -1,0 +1,140 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Image app with AJAX, React</title>
+<link rel="stylesheet" href="./style.css">
+<link rel="icon" type="image/jpg" href="http://www.watershed.co.uk/sites/default/files/styles/dshed-collection/public/project_images/REACT_logo_4-3_0.jpg">
+</head>
+<body>
+<div id="app"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script src="https://code.jquery.com/jquery-1.8.3.js"></script>
+<script type="text/babel">
+
+class Picture extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  handleClick() {
+    // console.log('this.props  ', this.props);
+    this.props.onClick(this.props.id);
+  }
+  render() {
+    console.log('this.props.favorite  ', this.props);
+    let cls = 'picture ' + (this.props.favorite ? 'favorite' : '');
+    return (
+      <div className={cls} onClick={this.handleClick.bind(this)}>
+        <img src={this.props.src} alt={this.props.title} title={this.props.title} width="200" />
+      </div>
+    );
+  }
+}
+
+class PictureList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pictures: [],
+      favorites: []
+    };
+  }
+  componentDidMount() {
+    let url = 'https://api.instagram.com/v1/media/popular?client_id=' + this.props.apiKey + '&callback=?';
+
+    $.getJSON(url, (result) => {
+      if (!result || !result.data || !result.data.length) {
+        return;
+      }
+
+      let pictures = result.data.map((p) => {
+        return {
+          id: p.id,
+          url: p.link,
+          src: p.images.low_resolution.url,
+          title: p.caption ? p.caption.text : '',
+          favorite: false
+        };
+      });
+
+      this.setState({
+        pictures
+      });
+    });
+  }
+  handlePictureClick(id) {
+    let { pictures, favorites } = this.state;
+
+    for (let i = 0; i < pictures.length; i++) {
+      if (pictures[i].id == id) {
+        if (pictures[i].favorite) {
+          return this.handleFavoriteClick(id);
+        }
+
+        favorites.push(pictures[i]);
+        pictures[i].favorite = true;
+        break;
+      }
+    }
+    this.setState({
+      pictures,
+      favorites
+    });
+  }
+  handleFavoriteClick(id) {
+    let { pictures, favorites } = this.state;
+
+    for (let i = 0; i < favorites.length; i++) {
+      if (favorites[i].id == id) break;
+    }
+
+    favorites.splice(id, 1);
+
+    for (let i = 0; i < pictures.length; i++) {
+      if (pictures[i].id == id) {
+        pictures[i].favorite = false;
+        break;
+      }
+    }
+
+    this.setState({
+      pictures,
+      favorites
+    });
+  }
+  render() {
+    let pictures = this.state.pictures.map((p, idx) => {
+      return <Picture id={p.id} src={p.src} title={p.title} favorite={p.favorite} onClick={this.handlePictureClick.bind(this)} key={p+idx} />
+    });
+    if (!pictures.length) {
+      pictures = <p>Loading images...</p>;
+    }
+
+    let favorites = this.state.favorites.map((p, idx) => {
+      return <Picture id={p.id} src={p.src} title={p.title} favorite={true} onClick={this.handleFavoriteClick.bind(this)} key={p+idx} />
+    });
+    if (!favorites.length) {
+      favorites = <p>Click an image to mark it as a favorite.</p>;
+    }
+
+    return (
+      <div>
+        <h1>popular Instagram pics</h1>
+        <div className="pictures">{pictures}</div>
+
+        <h1>Your favorites</h1>
+        <div className="favorites">{favorites}</div>
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(
+  <PictureList apiKey="642176ece1e7445e99244cec26f4de1f" />,
+  document.getElementById('app')
+)
+</script>
+</body>
+</html>

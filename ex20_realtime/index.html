@@ -22,7 +22,7 @@ class Realtime extends React.Component {
   }
   handleChange(e) {
     var inputVal = e.target.value;
-    var filter = this.props.items.filter(function(item, idx){
+    var filter = this.props.items.filter((item, idx) => {
       var name = item.name.toLowerCase();
       return name.indexOf(inputVal) != -1;
     });
@@ -70,7 +70,7 @@ var libraries = [
 ];
 
 ReactDOM.render(
-  <Realtime items={libraries}/>,
+  <Realtime items={libraries} />,
   document.getElementById('app')
 );
 </script>

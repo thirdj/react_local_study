@@ -1,0 +1,81 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Order Form, React</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="app"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script type="text/babel">
+
+class OrderChooser extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      total: 0
+    }
+  }
+  addTotal(price) {
+    this.setState({
+      total: this.state.total + price
+    });
+  }
+  render() {
+    var services = this.props.items.map((item, idx) => {
+      return <Order name={item.name} price={item.price} active={item.active} key={item+idx} addTotal={this.addTotal.bind(this)} />
+    });
+    return (
+      <div>
+        <h1>Our services</h1>
+        <div id="services">
+          {services}
+          <p id="total">
+            <span>total</span>
+            <b><span>$</span><span>{this.state.total}</span></b>
+          </p>
+        </div>
+      </div>
+    );
+  }
+}
+
+class Order extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { active: false }
+  }
+  handleClick() {
+    let active = !this.state.active;
+    this.setState({ active: active });
+    this.props.addTotal( active ? this.props.price : -this.props.price );
+  }
+  render() {
+    return (
+      <p className={this.state.active ? 'active' : ''} onClick={this.handleClick.bind(this)}>
+        {this.props.name}
+        <b>
+          ${this.props.price}
+        </b>
+      </p>
+    )
+  }
+}
+
+var services = [
+  { name: 'Web Development', price: 300 },
+  { name: 'Design', price: 400 },
+  { name: 'Integration', price: 250 },
+  { name: 'Training', price: 220 }
+];
+
+ReactDOM.render(
+  <OrderChooser items={services} />,
+  document.getElementById('app')
+);
+</script>
+</body>
+<html>
