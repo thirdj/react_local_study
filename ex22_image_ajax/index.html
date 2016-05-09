@@ -19,11 +19,9 @@ class Picture extends React.Component {
     super(props);
   }
   handleClick() {
-    // console.log('this.props  ', this.props);
     this.props.onClick(this.props.id);
   }
   render() {
-    console.log('this.props.favorite  ', this.props);
     let cls = 'picture ' + (this.props.favorite ? 'favorite' : '');
     return (
       <div className={cls} onClick={this.handleClick.bind(this)}>
