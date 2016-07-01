@@ -1,0 +1,148 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Contact CRUD</title>
+</head>
+<body>
+<div id="app"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script type="text/babel">
+
+class ContactCreator extends React.Component {
+  constructor(props) {
+    super(constructor);
+
+    this.state = {
+      name: '',
+      phone: ''
+    }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleChange(e) {
+    let nextState = {};
+    nextState[e.target.name] = e.target.value;
+    this.setState[nextState];
+  }
+  handleClick() {
+    this.props.onInsert(this.state.name, this.state.phone);
+    this.setState({
+      name: '',
+      phone: ''
+    });
+  }
+  render() {
+    return (
+      <div>
+        <p>
+          <input type="text"
+            name="name"
+            placeholder="name"
+            value={this.state.name}
+            onChange={this.handleChange} />
+          <input type="text"
+            name="phone"
+            placeholder="phone"
+            value={this.state.phone}
+            onChange={this._handleChange} />
+          <button onClick={this.handleClick}>Insert</button>
+        </p>
+      </div>
+    );
+  }
+}
+
+class ContactInfo extends React.Component {
+  handleClick() {
+    this.props.onSelect(this.props.contactKey);
+  }
+  render() {
+    return (
+      <li
+        onClick={this.handleClick.bind(this)}>
+        {this.props.name} {this.props.phone}
+      </li>
+    );
+  }
+}
+
+class Contacts extends React.Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      contactData: [
+          {name: "Abet", phone: "010-0000-0001"},
+          {name: "Betty", phone: "010-0000-0002"},
+          {name: "Charlie", phone: "010-0000-0003"},
+          {name: "David", phone: "010-0000-0004"}
+      ],
+      selectedKey: -1
+    };
+    this._insertContact = this._insertContact.bind(this);
+  }
+  _onSelect(key) {
+    if (key == this.state.selectedKey) {
+      console.log('key select cancelled');
+      this.setState({
+        selectedKey: -1
+      });
+      return;
+    }
+    this.setState({
+      selectedKey: key
+    });
+    console.log(key + ' is selected');
+  }
+  _isSelected(key) {
+    if (this.state.selectedKey == key) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  _insertContact(name, phone) {
+    let newState = update(this.state, {
+      contactData: {
+        $push: [{'name': name, 'phone': phone}]
+      }
+    });
+    this.setState(newState);
+  }
+  render() {
+    console.log(this.state.contactData);
+    // var _contactData = this.state.contactData.map((contact, i) => {
+    //   return (<ContactInfo name={contact.name} phone={contact.phone} key={contact.name + i} />);
+    // })
+    // console.log(_contactData);
+    return (
+      <div>
+        <h1>Contacts</h1>
+        <ul>
+          {this.state.contactData.map((contact, i) => {
+            return (
+              <ContactInfo
+                name={contact.name}
+                phone={contact.phone}
+                key={contact.name + i} />
+            );
+          })}
+        </ul>
+        <ContactCreator onInsert={this._insertContact} />
+      </div>
+    );
+  }
+}
+
+
+
+ReactDOM.render(
+  <Contacts />,
+  document.getElementById('app')
+);
+</script>
+</body>
+<html>
